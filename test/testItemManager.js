@@ -1,3 +1,5 @@
+const { assert } = require("console");
+
 const ItemManager = artifacts.require("./ItemManager.sol");
 
 contract("ItemManager", accounts=>{
@@ -7,6 +9,9 @@ contract("ItemManager", accounts=>{
         const itemPrice = 500;
 
         const result = await itemManagerInstance.createItem(itemName, itemPrice, {from: accounts[0]});
-        console.log(result);
+        assert.equal(result.logs[0].args._itemIndex, 0, "Its no the first item");
+
+        const item = await itemManagerInstance.items(0);
+        assert.equal(item._identifier, itemName, "The identifier was different");
     });
 });
